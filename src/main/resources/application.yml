@@ -1,0 +1,20 @@
+logging:
+  level:
+    root: INFO
+spring:
+  jpa:
+    debug: true
+    database: mysql
+    hibernate:
+#      enable_lazy_load_no_trans: true
+      ddl-auto: update
+    properties.hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+
+  datasource:
+    hikari:
+      maximum-pool-size: 1
+    platform: mysql
+    url: jdbc:mysql://localhost:3306/coupons
+    username: root
+    password: 1234
+    driverClassName: com.mysql.cj.jdbc.Driver
