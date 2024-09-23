@@ -122,13 +122,12 @@ public class AdminService {
         couponRepository.deleteByCompanyId(companyId);
         companyRepository.deleteById(companyId);
     }
-    public CompanyEntity getCompanyById(final long companyId) {
+    public CompanyEntity getCompanyById(final long companyId)  throws ApplicationException{
         Optional<CompanyEntity> company = companyRepository.findById(companyId);
         if(company.isPresent()){
             return company.get();
         }
-            System.out.println("Failed to retrieve company from the database with id " + companyId);
-        return null;
+            throw new ApplicationException("Failed to retrieve company from the database with id " + companyId);
     }
 
     public List<CompanyEntity> getAllCompanies(){
