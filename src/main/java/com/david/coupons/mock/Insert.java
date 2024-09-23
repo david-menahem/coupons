@@ -6,11 +6,8 @@ import com.david.coupons.entities.CouponEntity;
 import com.david.coupons.entities.CustomerEntity;
 import com.david.coupons.enums.Category;
 import com.david.coupons.exceptions.ApplicationException;
-import com.david.coupons.repositories.CompanyRepository;
-import com.david.coupons.repositories.CustomerRepository;
 import com.david.coupons.services.AdminService;
 import com.david.coupons.services.CompanyService;
-import com.david.coupons.services.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -22,12 +19,11 @@ import java.util.Random;
 @Component
 @RequiredArgsConstructor
 public class Insert {
+    private final AdminService adminService;
     private final CompanyService companyService;
-    private final CompanyRepository companyRepository;
-    private final CustomerRepository customerRepository;
     public void run() throws ApplicationException {
         Random rand = new Random();
-        for(int i = 1;i<10;i++) {
+        for (int i = 1; i < 10; i++) {
             CompanyEntity companyEntity = CompanyEntity.builder()
                     .name(TestData.COMPANY_NAME + " " + i)
                     .email(i + TestData.COMPANY_EMAIL)
@@ -36,8 +32,8 @@ public class Insert {
             Date startDate = new Date(System.currentTimeMillis());
             Date expireDate = new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 10);
 
-            CompanyEntity savedCompanyEntity = companyRepository.save(companyEntity);
-            if(i==2) {
+            CompanyEntity savedCompanyEntity = adminService.createCompany((companyEntity));
+            if (i == 2) {
                 startDate = new Date(System.currentTimeMillis() - 1000 * 60 * 60 * 24 * 10);
                 expireDate = new Date(System.currentTimeMillis() - 1000 * 60 * 60 * 24 * 5);
             }
@@ -48,7 +44,7 @@ public class Insert {
                     .description("description " + i)
                     .endDate(expireDate)
                     .startDate(startDate)
-                    .price(rand.nextInt(200) +1)
+                    .price(rand.nextInt(200) + 1)
                     .title("Book" + i)
                     .build();
 
@@ -60,12 +56,17 @@ public class Insert {
                     .email(i + TestData.CUSTOMER_EMAIL)
                     .password(TestData.CUSTOMER_PASSWORD.hashCode())
                     .build();
-            CustomerEntity savedCustomerEntity = customerRepository.save(customerEntity);
+            CustomerEntity savedCustomerEntity = adminService.createCustomer(customerEntity);
 
             savedCustomerEntity.setCoupons(new HashSet<>());
             savedCouponEntity.setCustomers(new HashSet<>());
             savedCustomerEntity.addCoupon(savedCouponEntity);
-            customerRepository.save(savedCustomerEntity);
+            adminService.updateCustomer(savedCustomerEntity);
         }
+    }
+    public boolean checkIfInserted() throws ApplicationException {
+        CompanyEntity companyEntity = adminService.getCompanyById(1L);
+
+        return companyEntity == null;
     }
 }

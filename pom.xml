@@ -14,7 +14,7 @@
 	<name>coupons</name>
 	<description>Final project for JB</description>
 	<properties>
-		<java.version>8</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -61,39 +61,36 @@
 			<version>0.9.1</version>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
+			<!-- Spring Boot Maven Plugin -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>3.1.0</version> <!-- Use the appropriate version -->
 				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
+					<mainClass>com.david.coupons.CouponsProjectApplication</mainClass>
+					<manifestEntries>
+						<Implementation-Title>My Spring Boot App</Implementation-Title>
+						<Implementation-Version>1.0.0</Implementation-Version>
+						<Built-By>David Menahem</Built-By>
+						<!-- Add more custom attributes here -->
+					</manifestEntries>
 				</configuration>
 			</plugin>
+
+			<!-- Jar Plugin (Optional, for additional control over JAR packaging) -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>3.0.1</version>
-				<executions>
-					<execution>
-						<id>copy-dependencies</id>
-						<phase>package</phase>
-						<goals><goal>copy-dependencies</goal></goals>
-					</execution>
-				</executions>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>com.david.coupons.CouponsProjectApplication</mainClass> <!-- Ensure this matches your main class -->
+						</manifest>
+					</archive>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-<distributionManagement>
-	<repository>
-		<id>1</id>
-		<url>https://git.heroku.com/guarded-escarpment-28316.git</url>
-	</repository>
-</distributionManagement>
 </project>

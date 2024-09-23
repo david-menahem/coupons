@@ -13,7 +13,9 @@ public class CouponsProjectApplication {
 
         try {
             ctx.getBean(DailyJob.class).checkExpiredCoupons();
-            //ctx.getBean(Insert.class).run();
+            if(ctx.getBean(Insert.class).checkIfInserted()) {
+                ctx.getBean(Insert.class).run();
+            }
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
